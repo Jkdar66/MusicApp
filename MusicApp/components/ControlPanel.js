@@ -5,7 +5,14 @@ import { TouchableHighlight } from "react-native-gesture-handler";
 
 class ControlPanel extends React.Component {
   render() {
-    const { PlaySound, PlayBack, PlayNext, Colors, isPlaying } = this.props;
+    const {
+      PlaySound,
+      PlayBack,
+      PlayNext,
+      Colors,
+      isPlaying,
+      positionPercent,
+    } = this.props;
     return (
       <View
         style={[
@@ -16,6 +23,14 @@ class ControlPanel extends React.Component {
           },
         ]}
       >
+        <View
+          style={{
+            width: `${positionPercent}%`,
+            height: 5,
+            backgroundColor: "#f08",
+          }}
+        />
+        {/* <Slider /> */}
         <View style={style.mainView}>
           <TouchableHighlight
             onPress={PlayBack}
@@ -53,13 +68,14 @@ const style = StyleSheet.create({
   body: {
     width: "100%",
     borderBottomWidth: 1,
-    padding: 5,
+    paddingBottom: 5,
   },
   mainView: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
+    padding: 1,
   },
   controlBtn: {
     width: 40,

@@ -16,7 +16,7 @@ const MusicScreen = () => {
   const [soundsInfos, setSoundsInfos] = useState([
     { title: "Sound Nr. 1", key: 0, isPlaying: false },
     { title: "Sound Nr. 2", key: 1, isPlaying: false },
-    { title: "Sound Nr. 2", key: 2, isPlaying: false },
+    { title: "Sound Nr. 3", key: 2, isPlaying: false },
   ]);
 
   const sound = useRef(new Audio.Sound());
@@ -24,6 +24,7 @@ const MusicScreen = () => {
   const [index, setIndex] = useState(0);
   const [shouldPlay, setShouldPlay] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [positionPercent, setPositionPercent] = useState(0);
 
   Audio.setAudioModeAsync({
     playsInSilentModeIOS: true,
@@ -92,9 +93,12 @@ const MusicScreen = () => {
       }
       sound.current.loadAsync(sounds[index], { shouldPlay: shouldPlay });
       sound.current.setOnPlaybackStatusUpdate(async (status) => {
+        const durationSeconds = Math.floor(status.durationMillis * 0.001);
+        const positionSeconds = Math.floor(status.positionMillis * 0.001);
+        const positionPercent = (positionSeconds / durationSeconds) * 100;
+        setPositionPercent(positionPercent);
         if (status.didJustFinish === true) {
           ChangeSound(index + 1);
-          console.log(status);
         }
       });
       setIsPlaying(shouldPlay);
@@ -138,6 +142,7 @@ const MusicScreen = () => {
           PlayBack={PlayBack}
           PlayNext={PlayNext}
           PlaySound={PlaySound}
+          positionPercent={positionPercent}
           isPlaying={isPlaying}
           Colors={useTheme().colors}
         />
