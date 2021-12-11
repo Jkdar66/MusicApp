@@ -26,10 +26,14 @@ const MusicScreen = () => {
   const [index, setIndex] = useState(0);
   const [shouldPlay, setShouldPlay] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+<<<<<<< HEAD
   const [soundPosition, setSoundPosition] = useState(0);
   const [soundDuration, setSoundDuration] = useState(0);
   const [soundDurationMillis, setSoundDurationMillis] = useState(0);
   const [soundPositionMillis, setSoundPositionMillis] = useState(0);
+=======
+  const [positionPercent, setPositionPercent] = useState(0);
+>>>>>>> a1b06be1f03d6b05749bf3a605bba6bb75a38c6b
 
   Audio.setAudioModeAsync({
     playsInSilentModeIOS: true,
@@ -108,6 +112,7 @@ const MusicScreen = () => {
       }
       sound.current.loadAsync(sounds[index], { shouldPlay: shouldPlay });
       sound.current.setOnPlaybackStatusUpdate(async (status) => {
+<<<<<<< HEAD
         const positionInSeconds = Math.floor(status.positionMillis * 0.001);
         const durationInSeconds = Math.floor(status.durationMillis * 0.001);
         const position = positionInSeconds / durationInSeconds;
@@ -118,6 +123,14 @@ const MusicScreen = () => {
 
         if (status.didJustFinish === true) {
           ChangeSound({ ind: index + 1 });
+=======
+        const durationSeconds = Math.floor(status.durationMillis * 0.001);
+        const positionSeconds = Math.floor(status.positionMillis * 0.001);
+        const positionPercent = (positionSeconds / durationSeconds) * 100;
+        setPositionPercent(positionPercent);
+        if (status.didJustFinish === true) {
+          ChangeSound(index + 1);
+>>>>>>> a1b06be1f03d6b05749bf3a605bba6bb75a38c6b
         }
       });
       setIsPlaying(shouldPlay);
@@ -163,6 +176,7 @@ const MusicScreen = () => {
           PlayBack={PlayBack}
           PlayNext={PlayNext}
           PlaySound={PlaySound}
+          positionPercent={positionPercent}
           isPlaying={isPlaying}
           soundDuration={soundDuration}
           soundPosition={soundPosition}

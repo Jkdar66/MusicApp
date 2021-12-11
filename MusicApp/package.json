@@ -27,7 +27,8 @@
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.10.1",
     "react-native-web": "0.17.1",
-    "yarn": "^1.22.17"
+    "yarn": "^1.22.17",
+    "@react-native-community/slider": "4.1.7"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

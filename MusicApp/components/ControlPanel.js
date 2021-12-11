@@ -25,6 +25,7 @@ class ControlPanel extends React.Component {
       PlayNext,
       Colors,
       isPlaying,
+<<<<<<< HEAD
       index,
       maxIndex,
       soundPosition,
@@ -33,6 +34,10 @@ class ControlPanel extends React.Component {
       setSoundPositionValue,
     } = this.props;
 
+=======
+      positionPercent,
+    } = this.props;
+>>>>>>> a1b06be1f03d6b05749bf3a605bba6bb75a38c6b
     return (
       <View
         style={[
@@ -43,6 +48,7 @@ class ControlPanel extends React.Component {
           },
         ]}
       >
+<<<<<<< HEAD
         <View>
           <View style={style.durationPositionView}>
             <Text style={{ color: "#fff" }}>
@@ -64,6 +70,16 @@ class ControlPanel extends React.Component {
             }
           />
         </View>
+=======
+        <View
+          style={{
+            width: `${positionPercent}%`,
+            height: 5,
+            backgroundColor: "#f08",
+          }}
+        />
+        {/* <Slider /> */}
+>>>>>>> a1b06be1f03d6b05749bf3a605bba6bb75a38c6b
         <View style={style.mainView}>
           <TouchableHighlight
             onPress={PlayBack}
@@ -113,7 +129,7 @@ const style = StyleSheet.create({
   body: {
     width: "100%",
     borderBottomWidth: 1,
-    padding: 5,
+    paddingBottom: 5,
   },
   sliderView: {},
   durationPositionView: {
@@ -125,6 +141,7 @@ const style = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
+    padding: 1,
   },
   controlBtn: {
     width: 40,
