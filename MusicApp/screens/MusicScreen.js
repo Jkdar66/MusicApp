@@ -2,11 +2,13 @@ import { useTheme } from "@react-navigation/native";
 import { Audio } from "expo-av";
 import React, { useEffect, useRef, useState } from "react";
 import { FlatList, View } from "react-native";
-import Button from "../components/Button";
+import SoundCard from "../components/SoundCard";
 import ControlPanel from "../components/ControlPanel";
 import Layout from "../components/Layout";
 
 const MusicScreen = () => {
+  const Colors = useTheme().colors;
+
   const sounds = [
     require("../assets/1.mp3"),
     require("../assets/2.mp3"),
@@ -16,7 +18,7 @@ const MusicScreen = () => {
   const [soundsInfos, setSoundsInfos] = useState([
     { title: "Sound Nr. 1", key: 0, isPlaying: false },
     { title: "Sound Nr. 2", key: 1, isPlaying: false },
-    { title: "Sound Nr. 2", key: 2, isPlaying: false },
+    { title: "Sound Nr. 3", key: 2, isPlaying: false },
   ]);
 
   const sound = useRef(new Audio.Sound());
@@ -24,6 +26,10 @@ const MusicScreen = () => {
   const [index, setIndex] = useState(0);
   const [shouldPlay, setShouldPlay] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [soundPosition, setSoundPosition] = useState(0);
+  const [soundDuration, setSoundDuration] = useState(0);
+  const [soundDurationMillis, setSoundDurationMillis] = useState(0);
+  const [soundPositionMillis, setSoundPositionMillis] = useState(0);
 
   Audio.setAudioModeAsync({
     playsInSilentModeIOS: true,
@@ -81,6 +87,16 @@ const MusicScreen = () => {
     ChangeSound({ ind: newInd });
   };
 
+  const setSoundPositionValue = async (value) => {
+    const status = await sound.current.getStatusAsync();
+    const durationInSeconds = Math.floor(status.durationMillis * 0.001);
+    const positionInSeconds = value * durationInSeconds;
+    sound.current.setStatusAsync({
+      positionMillis: positionInSeconds / 0.001,
+    });
+    !status.isPlaying ? PlaySound() : null;
+  };
+
   const LoadSound = async () => {
     try {
       const infos = [...soundsInfos];
@@ -92,9 +108,16 @@ const MusicScreen = () => {
       }
       sound.current.loadAsync(sounds[index], { shouldPlay: shouldPlay });
       sound.current.setOnPlaybackStatusUpdate(async (status) => {
+        const positionInSeconds = Math.floor(status.positionMillis * 0.001);
+        const durationInSeconds = Math.floor(status.durationMillis * 0.001);
+        const position = positionInSeconds / durationInSeconds;
+        position ? setSoundPosition(parseFloat(position.toFixed(4))) : null;
+        setSoundDuration(durationInSeconds);
+        setSoundDurationMillis(status.durationMillis);
+        setSoundPositionMillis(status.positionMillis);
+
         if (status.didJustFinish === true) {
-          ChangeSound(index + 1);
-          console.log(status);
+          ChangeSound({ ind: index + 1 });
         }
       });
       setIsPlaying(shouldPlay);
@@ -118,19 +141,21 @@ const MusicScreen = () => {
         <FlatList
           contentContainerStyle={{
             flexGrow: 1,
-            padding: 5,
+            paddingVertical: 5,
           }}
           data={soundsInfos}
           renderItem={({ item, index }) => (
-            <Button
+            <SoundCard
               key={item.key}
               index={index}
               title={item.title}
               onPress={() => ChangeSound({ ind: index })}
               isPlaying={soundsInfos[index].isPlaying}
+              soundPosition={soundPosition}
               playBtnOnPress={() =>
                 ChangeSound({ ind: index, stopPlaying: true })
               }
+              Colors={Colors}
             />
           )}
         />
@@ -139,7 +164,14 @@ const MusicScreen = () => {
           PlayNext={PlayNext}
           PlaySound={PlaySound}
           isPlaying={isPlaying}
-          Colors={useTheme().colors}
+          soundDuration={soundDuration}
+          soundPosition={soundPosition}
+          soundPositionMillis={soundPositionMillis}
+          soundDurationMillis={soundDurationMillis}
+          setSoundPositionValue={setSoundPositionValue}
+          index={index}
+          maxIndex={sounds.length - 1}
+          Colors={Colors}
         />
       </View>
     </Layout>

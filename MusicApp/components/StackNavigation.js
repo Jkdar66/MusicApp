@@ -41,6 +41,7 @@ class StackNavigation extends React.Component {
                   primary: "#fff",
                   text: "#fff",
                   customBorder: "#555",
+                  customCardBG: "#353535",
                 },
               }
             : {
@@ -54,6 +55,7 @@ class StackNavigation extends React.Component {
                   primary: "#000",
                   text: "#000",
                   customBorder: "#999",
+                  customCardBG: "#d5d5d5",
                 },
               }
         }

@@ -2,13 +2,12 @@ import { StyleSheet } from "react-native";
 
 const ButtonStyle = StyleSheet.create({
   body: {
-    width: "95%",
+    width: "100%",
     height: 80,
     overflow: "hidden",
-    backgroundColor: "#333",
-    borderRadius: 10,
+    backgroundColor: "#222",
     alignSelf: "center",
-    marginTop: 10,
+    borderBottomWidth: 0.5,
   },
   mainView: {
     flex: 1,
@@ -34,9 +33,13 @@ const ButtonStyle = StyleSheet.create({
     fontSize: 16,
   },
   iconBody: {
+    flexDirection: "row",
     padding: 10,
     justifyContent: "center",
     alignItems: "center",
+  },
+  iconBtn: {
+    marginLeft: 0,
   },
 });
 
